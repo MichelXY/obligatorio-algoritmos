@@ -1,10 +1,10 @@
 from fastapi import FastAPI, HTTPException, Request
 from utils.get_type_message import get_message_type
-from utils.chat import bot
 from models import repartidor
 from models import gestora
 from routes.clientes import router_client
 from routes.repartidor import router_repartidor
+from utils.chat import bot
 
 app = FastAPI()
 
@@ -87,11 +87,11 @@ async def received_message(request: Request):
         return "EVENT_RECEIVED"
 
 
-@app.post("/repartidor/agregar")
-async def agregar_repartidor(nombre: str, telefono: str):
-    repartidor = repartidor(nombre=nombre, telefono=telefono)
-    gestora().agregar_repartidor(repartidor)
-    return {"mensaje": "repartidor agregado"}
+@app.post("/repartidor")
+async def agregar_repartidor(repartidor: Repartidor):
+    print(f"Repartidor creado: {repartidor}")
+    Gestora().agregar_repartidor(repartidor)
+    return {"mensaje": "Repartidor agregado exitosamente"}
 
 
 if __name__ == "__main__":
