@@ -1,7 +1,15 @@
 from fastapi import FastAPI, HTTPException, Request
 from utils.get_type_message import get_message_type
+from utils.chat import bot
+from models import repartidor
+from models import gestora
+from routes.clientes import router_client
+from routes.repartidor import router_repartidor
 
 app = FastAPI()
+
+app.include_router(router_client)
+app.include_router(router_repartidor)
 
 
 @app.get("/welcome")
@@ -67,8 +75,8 @@ async def received_message(request: Request):
                 f"Mensaje recibido de {number}: Tipo: {type_message}, Contenido: {content}"
             )
 
-        # Aquí podrías agregar lógica adicional para procesar el mensaje recibido
-
+            # Aquí podrías agregar lógica adicional para procesar el mensaje recibido
+            bot.process_message(content)
         # Es crucial retornar un código HTTP 200 (implícito aquí)
         # o un mensaje de éxito para que Meta no reintente el envío.
         return "EVENT_RECEIVED"
@@ -77,6 +85,13 @@ async def received_message(request: Request):
         # En caso de error, todavía se recomienda devolver una respuesta de éxito (200)
         # para evitar reintentos continuos, aunque se debe registrar el error.
         return "EVENT_RECEIVED"
+
+
+@app.post("/repartidor/agregar")
+async def agregar_repartidor(nombre: str, telefono: str):
+    repartidor = repartidor(nombre=nombre, telefono=telefono)
+    gestora().agregar_repartidor(repartidor)
+    return {"mensaje": "repartidor agregado"}
 
 
 if __name__ == "__main__":
