@@ -1,14 +1,14 @@
 from fastapi import FastAPI, HTTPException, Request
 from utils.get_type_message import get_message_type
-from models import repartidor
-from models import gestora
-from routes.clientes import router_client
+from models.repartidor import Repartidor
+from models.gestora import Gestora
+from routes.clientes import router_cliente
 from routes.repartidor import router_repartidor
 from utils.chat import bot
 
 app = FastAPI()
 
-app.include_router(router_client)
+app.include_router(router_cliente)
 app.include_router(router_repartidor)
 
 
@@ -17,7 +17,7 @@ def index():
     return {"mensaje": "welcome developer"}
 
 
-ACCESS_TOKEN = "EAAMdryqdGbcBP4FlrBdZBTCS4w8rY87HSrD2FhXry0ZCWCl0sQZAEgr9IhqH8OBHDmWYfESUjzWe5RGUZA8ZBZCLSNPrAe6MkPZAxZCoUjxDMXZBqInxT3DDn6fNpYSDkTbVOQKasgqlqZCRGG9Is31cow4QEMq4ZAz26mDavGHZBWqpmsbRiZAAOn9oEMcJWZC1jGzBYNxu2ZCp0F5MCDseWOXgREZCVb8E5AUFXx3fDyZArFuO0Xl34QFcjNQIxcBBhUp0fwYC3o9sBgelsaJeVYTtIqr3E"
+ACCESS_TOKEN = "EAAMdryqdGbcBQDRL4MVmyZAo1pSgZAiXaymtktqAccoBQIeZAaSNXwgfjZCwfwbEIQ4UOqqqSsFyhm9QsXbNTSEzbQvaUrKzAj3ZAIPO2sGu1qpNfcUh0sqakXZCyi45zOVhx3rbiiUR8rZAZCwgoIJmstAQo94NikIwYaj7tiiHJq53cnKKQ6KFQrhhEZB7l0BIKRJM8t7o2XEKZAZANRZBAkVZBSpAYNd1mrN0WplC5"
 
 
 @app.get("/whatsapp")
@@ -76,7 +76,7 @@ async def received_message(request: Request):
             )
 
             # Aquí podrías agregar lógica adicional para procesar el mensaje recibido
-            bot.process_message(content)
+        bot.process_message(content)
         # Es crucial retornar un código HTTP 200 (implícito aquí)
         # o un mensaje de éxito para que Meta no reintente el envío.
         return "EVENT_RECEIVED"
