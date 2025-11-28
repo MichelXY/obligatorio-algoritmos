@@ -2,6 +2,12 @@ from functools import wraps
 from typing import Any, Optional, Dict, Callable
 import inspect
 from datetime import datetime
+import requests
+import json
+
+API_URL = "https://graph.facebook.com/v22.0/"
+WHATSAPP_ID = "883335111525916"
+ACCESS_TOKEN = "EAAMdryqdGbcBQDRL4MVmyZAo1pSgZAiXaymtktqAccoBQIeZAaSNXwgfjZCwfwbEIQ4UOqqqSsFyhm9QsXbNTSEzbQvaUrKzAj3ZAIPO2sGu1qpNfcUh0sqakXZCyi45zOVhx3rbiiUR8rZAZCwgoIJmstAQo94NikIwYaj7tiiHJq53cnKKQ6KFQrhhEZB7l0BIKRJM8t7o2XEKZAZANRZBAkVZBSpAYNd1mrN0WplC5"
 
 
 class Chat:
@@ -89,11 +95,8 @@ class Chat:
         /iniciar - Iniciar una nueva conversación
         /ayuda - Mostrar este mensaje de ayuda
         """
-        print(
-            f"send_message_to_user: {mensaje}"
-        )  # Aqui enviar el mensaje al usuario por whatsapp
-
-        self.set_waiting_for(self.funcion_1_bienvenida)
+        self.send_text_message(mensaje)
+        # self.set_waiting_for(self.funcion_1_bienvenida)
 
     def funcion_1_bienvenida(self):
         """Inicia la conversación con opciones."""
@@ -167,6 +170,37 @@ class Chat:
                 )
         else:
             print("❌ Por favor usa un comando. Escribe /ayuda para ver opciones.")
+
+    def _send_request(self, message_data: Dict[str, Any]) -> bool:
+
+        url = f"{API_URL}{WHATSAPP_ID}/messages"
+
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {ACCESS_TOKEN}",
+        }
+
+        message_data["to"] = self.user_phone
+        message_data["messaging_product"] = "whatsapp"
+        try:
+            response = requests.post(
+                url, data=json.dumps(message_data), headers=headers
+            )
+            if response.status_code == 200:
+                print(f"Mensaje enviado")
+                return True
+            else:
+                return False
+        except Exception as e:
+            print((e))
+            return False
+
+    def send_text_message(self, message: str) -> bool:
+        message_data = {"type": "text", "text": {"body": message}}
+        return self._send_request(message_data)
+
+    def send_interactive_message(self, message_data: Dict[str, Any]) -> bool:
+        return self._send_request(message_data)
 
 
 # Crear instancia del bot

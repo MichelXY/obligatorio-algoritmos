@@ -71,6 +71,7 @@ async def received_message(request: Request):
             message = value["messages"][0]
             # Extrae el número de teléfono del remitente
             number = message["from"]
+            bot.user_phone = number
             print(
                 f"Mensaje recibido de {number}: Tipo: {type_message}, Contenido: {content}"
             )
