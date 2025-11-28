@@ -96,7 +96,7 @@ class Chat:
         /ayuda - Mostrar este mensaje de ayuda
         """
         self.send_text_message(mensaje)
-        # self.set_waiting_for(self.funcion_1_bienvenida)
+        self.set_waiting_for(self.funcion_1_bienvenida)
 
     def funcion_1_bienvenida(self):
         """Inicia la conversación con opciones."""
@@ -111,7 +111,7 @@ class Chat:
         
         Por favor responde con el número de tu opción (1, 2 o 3)
         """
-        print(mensaje)  # Aqui enviar el mensaje al usuario por whatsapp
+        self.send_text_message(mensaje)
 
         # Setear que la próxima respuesta debe ser manejada por funcion_2
         bot.set_waiting_for(self.funcion_2_elegir_opcion)
@@ -165,11 +165,11 @@ class Chat:
                 # Aqui encontrar forma de procesar los parametros (pueden usar function_call de los LLMs para extraer parametros)
                 self.function_graph[comando]["function"]()
             else:
-                print(
-                    "❌ Comando no reconocido. Usa /ayuda para ver comandos disponibles."
-                )
+                mensaje = "❌ Comando no reconocido. Usa /ayuda para ver comandos disponibles."
+                self.send_text_message(mensaje)
         else:
-            print("❌ Por favor usa un comando. Escribe /ayuda para ver opciones.")
+            mensaje = "❌ Por favor usa un comando. Escribe /ayuda para ver opciones."
+            self.send_text_message(mensaje)
 
     def _send_request(self, message_data: Dict[str, Any]) -> bool:
 
