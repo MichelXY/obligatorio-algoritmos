@@ -4,6 +4,7 @@ import inspect
 from datetime import datetime
 import requests
 import json
+import os
 
 API_URL = "https://graph.facebook.com/v22.0/"
 WHATSAPP_ID = "883335111525916"
@@ -128,7 +129,7 @@ class Chat:
             self.funcion_3_responder(opcion)
         else:
             # Opción inválida, volver a la función 1
-            print("❌ Opción inválida. Intenta de nuevo.")
+            self.send_text_message("❌ Opción inválida. Intenta de nuevo.")
             self.funcion_1_bienvenida()
 
     def funcion_3_responder(self, opcion: str):
@@ -170,6 +171,24 @@ class Chat:
         else:
             mensaje = "❌ Por favor usa un comando. Escribe /ayuda para ver opciones."
             self.send_text_message(mensaje)
+
+    def load_json_message(self, filename: str) -> Optional[Dict]:
+        """Carga un archivo JSON desde el directorio raiz o relativo."""
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        # filepath será '.../tu_proyecto/utils/json/menu.json'
+        filepath = os.path.join(base_dir, "json", filename)
+
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            print(
+                f"❌ ERROR: Archivo JSON no encontrado en la ruta: {filepath}. Verifica la estructura 'utils/json/{filename}'."
+            )
+            return None
+        except json.JSONDecodeError as e:
+            print(f"❌ ERROR: Fallo al decodificar JSON en {filepath}: {e}")
+            return None
 
     def _send_request(self, message_data: Dict[str, Any]) -> bool:
 

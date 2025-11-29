@@ -1,0 +1,51 @@
+{
+    "type": "interactive",
+    "interactive": {
+        "type": "list",
+        "header": {
+            "type": "text",
+            "text": "Ejemplo de Titulo"
+        },
+        "body": {
+            "text": "Cuerpo de la lista"
+        },
+        "footer": {
+            "text": "Pie de lista"
+        },
+        "action": {
+            "button": "Menu",
+            "sections": [
+                {
+                    "title": "Titulo de Seccion",
+                    "rows": [
+                        {
+                            "id": "1",
+                            "title": "Hamburguesa",
+                            "description": "Con Cheddar"
+                        },
+                        {
+                            "id": "2",
+                            "title": "Pizza",
+                            "description": "Con Piña"
+                        }
+                    ]
+                },
+                {
+                    "title": "Minutas",
+                    "rows": [
+                        {
+                            "id": "3",
+                            "title": "Milanesa",
+                            "description": "Napolitana"
+                        },
+                        {
+                            "id": "4",
+                            "title": "Milanesa casera",
+                            "description": "De carne"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
